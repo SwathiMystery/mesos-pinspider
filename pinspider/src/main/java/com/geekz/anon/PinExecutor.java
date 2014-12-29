@@ -56,10 +56,10 @@ public class PinExecutor implements Executor {
 
 	private String getPinterestData(String url) throws IOException {
 		Document document;
-		String userProfile="";
+		String userProfile = "";
 		try {
 			document = Jsoup.connect(url).get();
-			 userProfile = getUserProfileData(document);
+			userProfile = getUserProfileData(document);
 
 		} catch (Exception e) {
 			LOGGER.error("Error while parsing Pinterest HTML Page." + e.getMessage());

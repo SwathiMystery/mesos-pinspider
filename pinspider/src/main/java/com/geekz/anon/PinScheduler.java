@@ -70,8 +70,7 @@ public class PinScheduler implements Scheduler {
 				LOGGER.info("Launching task :" + taskID.getValue() + " using the offer : " + offer.getId().getValue());
 
 				String url = crawlQueue.get(0);
-				LOGGER.info("URL Obtained :"+ url);
-
+				LOGGER.info("URL Obtained :" + url);
 
 				Protos.TaskInfo taskInfo = Protos.TaskInfo.newBuilder().setName("task " + taskID.getValue())
 														  .setTaskId(taskID).setSlaveId(offer.getSlaveId())
@@ -87,9 +86,9 @@ public class PinScheduler implements Scheduler {
 																					   .setScalar(Protos.Value.Scalar
 																							   .newBuilder()
 																							   .setValue(MEM_PER_TASK)))
-														  .setData(ByteString
-																  .copyFromUtf8(crawlQueue.get(0))).setExecutor(
-								Protos.ExecutorInfo.newBuilder(pinExecutor)).build();
+														  .setData(ByteString.copyFromUtf8(crawlQueue.get(0)))
+														  .setExecutor(Protos.ExecutorInfo.newBuilder(pinExecutor))
+														  .build();
 
 				taskInfoList.add(taskInfo);
 				remainingCpus -= CPUS_PER_TASK;

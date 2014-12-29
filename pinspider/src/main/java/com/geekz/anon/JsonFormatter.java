@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 
 /**
  * An utility for JSON formatting.
+ *
  * @author swathi on 12/29/14.
  */
 public final class JsonFormatter {
@@ -22,10 +23,8 @@ public final class JsonFormatter {
 	/**
 	 * Converts a Raw Type to JSON String.
 	 *
-	 * @param <T>
-	 *            Type to be converted
-	 * @param t
-	 *            Object of the type
+	 * @param <T> Type to be converted
+	 * @param t   Object of the type
 	 * @return JSON representation
 	 */
 	public static <T> String toJSON(T t) {
@@ -39,12 +38,9 @@ public final class JsonFormatter {
 	/**
 	 * Converts a JSON String to object representation.
 	 *
-	 * @param <T>
-	 *            Type to be converted
-	 * @param responseString
-	 *            JSON representation
-	 * @param clazz
-	 *            Target class
+	 * @param <T>            Type to be converted
+	 * @param responseString JSON representation
+	 * @param clazz          Target class
 	 * @return Object of the target type
 	 */
 	public static <T> T fromJSON(String responseString, Class<T> clazz) {

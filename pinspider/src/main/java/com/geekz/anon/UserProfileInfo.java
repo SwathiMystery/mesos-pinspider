@@ -2,6 +2,7 @@ package com.geekz.anon;
 
 /**
  * Pinterest basic user profile information.
+ *
  * @author swathi on 12/29/14.
  */
 public class UserProfileInfo {
@@ -69,7 +70,6 @@ public class UserProfileInfo {
 		this.name = name;
 		this.pinsCount = pinsCount;
 	}
-
 
 	public String getBio() {
 		return bio;
@@ -168,8 +168,7 @@ public class UserProfileInfo {
 		return JsonFormatter.toJSON(this);
 	}
 
-	@Override
-	public String toString() {
+	@Override public String toString() {
 		return toJSON();
 	}
 }
