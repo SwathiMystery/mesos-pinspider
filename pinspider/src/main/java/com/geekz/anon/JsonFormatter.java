@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import java.lang.reflect.Type;
 
 /**
+ * An utility for JSON formatting.
  * @author swathi on 12/29/14.
  */
 public final class JsonFormatter {
