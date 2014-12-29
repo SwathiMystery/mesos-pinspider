@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- Appenders -->
+    <appender name="rfa" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="spider.log"/>
+        <param name="MaxFileSize" value="10MB"/>
+        <!-- Keep one backup file -->
+        <param name="MaxBackupIndex" value="10"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss}] [%-5p] [%t] [%c] [%m]%n"/>
+        </layout>
+    </appender>
+
+    <!-- Application Loggers -->
+    <logger name="com.geekz.anon">
+        <level value="info"/>
+    </logger>
+
+   <logger name="org.apache.mesos"     >
+       <level value="info" />
+   </logger>
+
+    <logger name="org.apache.mesos"     >
+        <level value="debug" />
+    </logger>
+
+    <!-- Root Logger -->
+    <root>
+        <priority value="info"/>
+        <appender-ref ref="rfa"/>
+    </root>
+
+</log4j:configuration>
