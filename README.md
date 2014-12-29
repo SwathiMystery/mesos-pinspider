@@ -19,7 +19,7 @@ $java -cp pinspider-1.0-SNAPSHOT-jar-with-dependencies.jar com.geekz.anon.PinDri
 ```
 - [Web UI Mesos](http://127.0.0.1:5050/#/frameworks) and click on "Pinspider Framework"
 
-Sample output:
+- Sample output:
 ```
 {
   "bio": "Breaking technology news, analysis, and opinions from TechCrunch. Your number guide for all things tech.",
