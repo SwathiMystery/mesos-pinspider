@@ -135,6 +135,7 @@ public class PinScheduler implements Scheduler {
 			Protos.SlaveID slaveID, byte[] bytes) {
 		String data = new String(bytes);
 		System.out.println(data);
+		LOGGER.info("User Profile Information : " + data);
 	}
 
 	@Override public void disconnected(SchedulerDriver schedulerDriver) {

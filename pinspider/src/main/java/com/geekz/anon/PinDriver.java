@@ -20,12 +20,6 @@ public class PinDriver {
 		}
 
 		String path = System.getProperty("user.dir")+"/pinspider-1.0-SNAPSHOT-jar-with-dependencies.jar";
-//		try {
-//			path = new File("pinspider-1.0-SNAPSHOT-jar-with-dependencies.jar").getCanonicalPath();
-//		} catch (IOException e) {
-//
-//			LOGGER.error("file jar not found" + e.getMessage());
-//		}
 
 		Protos.CommandInfo.URI uri = Protos.CommandInfo.URI.newBuilder().setValue(path).setExtract(false).build();
 		String commandPinSpiderExecutor = "java -cp pinspider-1.0-SNAPSHOT-jar-with-dependencies.jar com.geekz.anon.PinExecutor";

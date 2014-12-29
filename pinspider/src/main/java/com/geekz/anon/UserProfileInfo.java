@@ -1,6 +1,7 @@
 package com.geekz.anon;
 
 /**
+ * Pinterest basic user profile information.
  * @author swathi on 12/29/14.
  */
 public class UserProfileInfo {
