@@ -1,4 +1,4 @@
-package com.geekz.anon;
+package com.geekz.anon.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

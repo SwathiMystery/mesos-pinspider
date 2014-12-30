@@ -1,4 +1,6 @@
-package com.geekz.anon;
+package com.geekz.anon.model;
+
+import com.geekz.anon.util.JsonFormatter;
 
 /**
  * Pinterest basic user profile information.

@@ -1,4 +1,4 @@
-package com.geekz.anon;
+package com.geekz.anon.mesos.framework;
 
 import com.google.protobuf.ByteString;
 import org.apache.log4j.Logger;
@@ -17,19 +17,20 @@ public class PinScheduler implements Scheduler {
 
 	private final static Logger LOGGER = Logger.getLogger(PinScheduler.class);
 
-	private final Protos.ExecutorInfo pinExecutor;
+	private final Protos.ExecutorInfo pinUserProfileExecutor, pinUserBoardExecutor;
 	private final int totalTasks;
 	private List<String> crawlQueue;
 	private int launchedTasks = 0;
 	private int finishedTasks = 0;
 
-	public PinScheduler(Protos.ExecutorInfo pinExecutor) {
-		this(pinExecutor, 5, "http://www.pinterest.com/techcrunch");
+	public PinScheduler(Protos.ExecutorInfo pinUserProfileExecutor , Protos.ExecutorInfo pinUserBoardExecutor ) {
+		this(pinUserProfileExecutor,pinUserBoardExecutor, 5, "http://www.pinterest.com/techcrunch");
 
 	}
 
-	public PinScheduler(Protos.ExecutorInfo pinExecutor, int totalTasks, String url) {
-		this.pinExecutor = pinExecutor;
+	public PinScheduler(Protos.ExecutorInfo pinUserProfileExecutor,Protos.ExecutorInfo pinUserBoardExecutor,  int totalTasks, String url) {
+		this.pinUserProfileExecutor = pinUserProfileExecutor;
+		this.pinUserBoardExecutor = pinUserBoardExecutor;
 		this.totalTasks = totalTasks;
 		this.crawlQueue = Collections.synchronizedList(new ArrayList<String>());
 		this.crawlQueue.add(url);
@@ -65,14 +66,14 @@ public class PinScheduler implements Scheduler {
 			double remainingCpus = offerCpus;
 			double remainingMem = offerMem;
 
-			while (launchedTasks < totalTasks && remainingCpus >= CPUS_PER_TASK && remainingMem >= MEM_PER_TASK) {
+			if (launchedTasks < totalTasks && remainingCpus >= CPUS_PER_TASK && remainingMem >= MEM_PER_TASK) {
 				Protos.TaskID taskID = Protos.TaskID.newBuilder().setValue(Integer.toString(launchedTasks++)).build();
 				LOGGER.info("Launching task :" + taskID.getValue() + " using the offer : " + offer.getId().getValue());
 
 				String url = crawlQueue.get(0);
 				LOGGER.info("URL Obtained :" + url);
 
-				Protos.TaskInfo taskInfo = Protos.TaskInfo.newBuilder().setName("task " + taskID.getValue())
+				Protos.TaskInfo pinUserProfileTaskInfo = Protos.TaskInfo.newBuilder().setName("task " + taskID.getValue())
 														  .setTaskId(taskID).setSlaveId(offer.getSlaveId())
 														  .addResources(Protos.Resource.newBuilder().setName("cpus")
 																					   .setType(
@@ -87,15 +88,37 @@ public class PinScheduler implements Scheduler {
 																							   .newBuilder()
 																							   .setValue(MEM_PER_TASK)))
 														  .setData(ByteString.copyFromUtf8(crawlQueue.get(0)))
-														  .setExecutor(Protos.ExecutorInfo.newBuilder(pinExecutor))
+														  .setExecutor(Protos.ExecutorInfo.newBuilder(
+																  pinUserProfileExecutor))
 														  .build();
 
-				taskInfoList.add(taskInfo);
-				remainingCpus -= CPUS_PER_TASK;
-				remainingMem -= MEM_PER_TASK;
+				taskID = Protos.TaskID.newBuilder().setValue(Integer.toString(launchedTasks++)).build();
+				LOGGER.info("Launching task :" + taskID.getValue() + " using the offer : " + offer.getId().getValue());
+
+				Protos.TaskInfo pinUserBoardTaskInfo = Protos.TaskInfo.newBuilder().setName("task " + taskID.getValue())
+														  .setTaskId(taskID).setSlaveId(offer.getSlaveId())
+														  .addResources(Protos.Resource.newBuilder().setName("cpus")
+																					   .setType(
+																							   Protos.Value.Type.SCALAR)
+																					   .setScalar(Protos.Value.Scalar
+																							   .newBuilder().setValue(
+																									   CPUS_PER_TASK)))
+														  .addResources(Protos.Resource.newBuilder().setName("mem")
+																					   .setType(
+																							   Protos.Value.Type.SCALAR)
+																					   .setScalar(Protos.Value.Scalar
+																							   .newBuilder()
+																							   .setValue(MEM_PER_TASK)))
+														  .setData(ByteString.copyFromUtf8(crawlQueue.get(0)))
+														  .setExecutor(Protos.ExecutorInfo.newBuilder(
+																  pinUserBoardExecutor))
+														  .build();
+
+				taskInfoList.add(pinUserProfileTaskInfo);
+				taskInfoList.add(pinUserBoardTaskInfo);
+
 			}
-			Protos.Filters filters = Protos.Filters.newBuilder().setRefuseSeconds(1).build();
-			schedulerDriver.launchTasks(offer.getId(), taskInfoList, filters);
+			schedulerDriver.launchTasks(offer.getId(), taskInfoList);
 		}
 	}
 

@@ -1,4 +1,4 @@
-package com.geekz.anon;
+package com.geekz.anon.mesos.framework;
 
 import com.google.protobuf.ByteString;
 import org.apache.log4j.Logger;
@@ -22,14 +22,21 @@ public class PinDriver {
 		String path = System.getProperty("user.dir") + "/pinspider-1.0-SNAPSHOT-jar-with-dependencies.jar";
 
 		Protos.CommandInfo.URI uri = Protos.CommandInfo.URI.newBuilder().setValue(path).setExtract(false).build();
-		String commandPinSpiderExecutor = "java -cp pinspider-1.0-SNAPSHOT-jar-with-dependencies.jar com.geekz.anon.PinExecutor";
+		String commandUserProfile = "java -cp pinspider-1.0-SNAPSHOT-jar-with-dependencies.jar com.geekz.anon.mesos.framework.PinUserProfileExecutor";
+		Protos.CommandInfo commandInfoUserProfile = Protos.CommandInfo.newBuilder().setValue(commandUserProfile).addUris(uri)
+																	  .build();
 
-		Protos.CommandInfo commandInfo = Protos.CommandInfo.newBuilder().setValue(commandPinSpiderExecutor).addUris(uri)
+		String commandUserBoard   = "java -cp pinspider-1.0-SNAPSHOT-jar-with-dependencies.jar com.geekz.anon.mesos.framework.PinUserBoardExecutor";
+		Protos.CommandInfo commandInfoUserBoard = Protos.CommandInfo.newBuilder().setValue(commandUserBoard).addUris(uri)
 														   .build();
 
-		Protos.ExecutorInfo executorInfo = Protos.ExecutorInfo.newBuilder().setExecutorId(
-				Protos.ExecutorID.newBuilder().setValue("PinExecutor")).setCommand(commandInfo)
-															  .setName("Pin Executor Java").setSource("java").build();
+		Protos.ExecutorInfo userProfileExecutorInfo = Protos.ExecutorInfo.newBuilder().setExecutorId(
+				Protos.ExecutorID.newBuilder().setValue("PinUserProfileExecutor")).setCommand(commandInfoUserProfile)
+															  .setName("PinUserProfileExecutor Java").setSource("java").build();
+
+		Protos.ExecutorInfo userBoardExecutorInfo = Protos.ExecutorInfo.newBuilder().setExecutorId(
+				Protos.ExecutorID.newBuilder().setValue("PinUserBoardExecutor")).setCommand(commandInfoUserBoard)
+															  .setName("PinUserBoardExecutor Java").setSource("java").build();
 
 		Protos.FrameworkInfo.Builder frameworkBuilder = Protos.FrameworkInfo.newBuilder().setFailoverTimeout(120000)
 																			.setUser("").setName("Pinspider Framework");
@@ -40,8 +47,8 @@ public class PinDriver {
 		}
 
 		Scheduler scheduler = args.length == 1 ?
-				new PinScheduler(executorInfo) :
-				new PinScheduler(executorInfo, Integer.parseInt(args[1]), args[2]);
+				new PinScheduler(userProfileExecutorInfo, userBoardExecutorInfo) :
+				new PinScheduler(userProfileExecutorInfo, userBoardExecutorInfo, Integer.parseInt(args[1]), args[2]);
 
 		MesosSchedulerDriver schedulerDriver = null;
 
